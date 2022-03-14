@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ printf "%s-%s" .Release.Name .Chart.Name }}
+spec:
+  rules:
+  - host: {{ .Release.Name }}.hello-world.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ printf "%s-%s" .Release.Name .Chart.Name }}
+            port:
+              number: 80

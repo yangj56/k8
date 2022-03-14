@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ printf "%s-%s" .Release.Name .Chart.Name }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ printf "%s-%s" .Release.Name .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        name: {{ printf "%s-%s" .Release.Name .Chart.Name }}
+    spec:
+      containers:
+      - name: testing
+        image: learnk8s/hello:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+          - containerPort: 3000
