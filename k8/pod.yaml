@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Pod
 metadata:
-name: podinfo
+  name: myapp-pod
+  labels:
+    app: myapp
 spec:
   containers:
-    - name: podinfo
-      image: stefanprodan/podinfo:6.0.3
-      ports:
-        - containerPort: 9898
+    - name: nginx-container
+      image: nginx
