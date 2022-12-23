@@ -1,0 +1,54 @@
+# environment variables
+
+# docker way
+# docker run -e APP_COLOR=pink simple-webapp-color
+
+# config map
+# So there are two phases involved in configuring ConfigMaps. 
+# First create the ConfigMaps 
+# Second Inject them into the POD.
+
+# Imperative: kubectl create configmap <config-name> --from-literal=<key>=<value>
+# Declarative 
+apiVersion: v1 
+kind: Pod 
+metadata:
+  name: simple-webapp-color 
+spec:
+  containers:
+  - name: simple-webapp-color
+    image: simple-webapp-color 
+    ports:
+    - containerPort: 8080
+  env:
+  - name: APP_COLOR # direct way (hard to manage when there are too many pod definitions)
+    value: pink
+  - name: APP_COLOR # using configMap (this is single env method, below got other methods)
+    valueFrom:
+        configMapKeyRef:
+  - name: APP_COLOR # using secretKey
+    valueFrom:
+        secretKeyRef:
+  envFrom:
+  - configMapRef:
+    name: app-config
+
+# multiple ways to inject configMap
+# 1. ENV
+envFrom:
+- configMapRef:
+  name: app-config
+
+# 2. Single ENV
+env:
+- name: APP_COLOR
+  valueFrom:
+    configMapKeyRef:
+      name: app-config 
+      key: APP_COLOR
+      
+# 3. Volume
+volumes:
+  - name: app-config-volume
+    configMap:
+      name: app-config

@@ -1,0 +1,12 @@
+# The entrypoint is the command that is run at startup, 
+# and the CMD is the default parameter passed to the command.
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: ubuntu-sleeper-pod 
+spec:
+  containers:
+    - name: ubuntu-sleeper
+      image: ubuntu-sleeper
+      command: ["sleep"] # override the ENTRYPOINT instruction in docker file
+      args: ["10"] # override the CMD instruction in docker file
