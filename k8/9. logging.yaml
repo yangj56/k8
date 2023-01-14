@@ -1,0 +1,17 @@
+# docker logs using -d mode
+# docker logs -f 
+# kubectl also the same 
+# we log the pod name follow by the container name
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp
+spec:
+  containers: # an array of containers
+    - name: simple-webapp
+      image: simple-webapp
+      ports: 
+        containerPort: 6000
+    - name: log-agent
+      image: log-agent

@@ -1,0 +1,28 @@
+# by default all the pods on the virutal network can communicate with each other as the ingress and egress rule is configured to "allow all"
+
+# but it is security flawed, frontend application cannot communicate with database as it should only be reacheable by the web app or api app
+
+# we need to configure network policies
+  # user -> frontend 80 -> web app -> db
+  # create network policies and link to pod by selector
+
+# we can restrict db ingress by creating 
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-policy
+spec:
+  podSelector:
+    matchingLabels: 
+      role: db
+  policyType:
+  - ingress #(allow ingress for the db application, the ingress must be from api-pod on port 3306)
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels: 
+          name: api-pod
+    ports:
+    - protocol: tcp
+      port: 3306

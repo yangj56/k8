@@ -1,0 +1,26 @@
+# docker is meant to be transient (last for a short period of time)
+  # but we can persist data by attaching a volume
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: random-number-generator
+spec:
+  containers:
+  - image: alpine
+    name: alpine
+    command: ["/bin/sh","-c"]
+    args: ["shuf -i 0-100 -n 1 >> /opt/number.out;"]
+    volumeMounts:
+    - mountPath: /opt
+      name: data-volume
+  volumes:
+  - name: data-volume
+    hostPath:
+      path: /data #the random number will be stored in node /data folder
+      type: Directory
+  - name: data-volume
+    awsElasticBlockStore:
+      volumeID: volumeID
+      fsType: ext4
+# the above solution only works in single node, but not the multi node cluster

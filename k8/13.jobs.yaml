@@ -1,0 +1,33 @@
+# workload are meant to be ran periodically (data processing, analytics, reporting etc...)
+
+# kubectl create the pod definition, but it will exit one the command is completed and then it will restart and complete again, this loop continues
+# kubenetes is trying to make sure the pod is in running status, so it recreate it everytime it is completed
+  # but we can change the behaviour not to restart by adding
+  # thats how jobs can be created it does its job and exit, it doesnt need to be running
+
+# "Job"
+  # replicaset is a job to make sure specified number of pod is created are running 
+# apiVersion: v1
+# kind: Pod
+# metadata: 
+#   name: math-ops
+# specs:
+#   containers:
+#   - name: math-add
+#     image: ubuntu
+#     command: ['expr', '3', '+', '2']
+#   restartPolicy: Never/OnFailure
+
+# create job using definition file
+apiVersion: batch/v1
+kind: Job
+metadata: 
+  name: math-add-job
+specs:
+  template:
+    specs:
+      containers:
+      - name: math-add
+        image: ubuntu
+        command: ['expr', '3', '+', '2']
+      restartPolicy: Never/OnFailure

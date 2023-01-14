@@ -1,0 +1,57 @@
+# an ingress resouce is a set of rules and configurations apply to the ingress controller
+# configure rules such as
+  # forward all the traffics to a single application
+  # route traffics to different application based on url
+  # route user based on the domain name itself
+
+
+# 1st type: one single backend no rule is required
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: ingress-wear
+# spec:
+#   backend:
+#     serviceName: wear-service
+#     servicePort: 80
+
+# 2nd type: multiple path /wear or /watch
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: ingress-wear-watch
+# spec:
+#   rules:
+#   - http:
+#      paths:
+#       - path: /wear
+#         backend: 
+#           serviceName: wear-service
+#           servicePort: 80
+#       - path: /watch
+#         backend: 
+#           serviceName: watch-service
+#           servicePort: 80
+# when the ingress is created, it also created default-http-backend:80 (if the request did not match any of the rules it will redirect to this default backends)\
+
+# 3rd type: it handles domain name
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-wear-watch
+spec:
+  rules:
+  - host: wear.my-online-store.com
+    http:
+     paths:
+      - path: /wear
+        backend: 
+          serviceName: wear-service
+          servicePort: 80
+  - host: watch.my-online-store.com
+    http:
+     paths:
+      - path: /watch
+        backend: 
+          serviceName: watch-service
+          servicePort: 80

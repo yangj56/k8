@@ -1,0 +1,28 @@
+# another use case of label is for other object to connect with the selected kind
+# how replicaset discover pod by selector
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: simple-webapp-replicaset
+  labels: 
+    app: app1
+    function: front-end
+  annotations:
+    buildVersion: 1.44
+specs:
+  replica: 3
+  selector:
+    matchLabels:
+     app: app1
+  template:
+    metadata:
+      labels: 
+        app: app1
+        function: front-end
+    specs:
+      containers:
+        - name: simple-webapp
+          image: simple-webapp
+
+# annotation
+# it is only for informative purpose: build version, contact details, phone number etc...

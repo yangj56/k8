@@ -1,0 +1,32 @@
+# in the event of crash, how kubenetes know to spin up new instance?
+# in kubenetes orchestration, everytime an app crashes, kubenetes starts new instance to match the count
+# what if the app is broken with bugs, it is running but it is returning errors to user. we need to restart the server but how kubenetes knows?
+# liveness check coming in:
+# liveness check will periodically check the application to see if the app is running and not stucked or broken, if it is unhealthy, kube will destroy
+# this container and recreated
+
+# very similar to readiness probe, 3 ways to check, api, tcp or command
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp
+spec:
+  containers: # an array of containers
+    - name: simple-webapp
+      image: simple-webapp
+      ports: 
+        containerPort: 6000
+      livenessProbe:
+        httpGet:
+          path: /api/ready/health
+          port: 8080
+        tcpSocket:
+          port: 3306
+        exec:
+          command:
+            - cat
+            - /app/isready
+        initialDelaySeconds: 10 # give some time for the server to warm up before checking
+        periodSeconds: 5 # how often to probe
+        failureThreshold: 8 # default if 3 tries failed, the probe will stop

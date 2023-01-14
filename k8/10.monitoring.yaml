@@ -1,0 +1,8 @@
+# monitoring container's metrics
+# tools Metrics-Server, Prometheus, the Elastic Stack, and proprietary solutions like Datadog and Dynatrace.
+# "Metrics Server" is covered for the CKAD certification ("Heapster" is deprecated)
+  # one metrics server per kubenetes cluster
+  # only in memory solution (cannot see historical data)
+  # it retrieves metrics from each of the kubenetes nodes and pods and aggregate it and store "in memeory" 
+  # how is the metrics collected? kubenetes run an agent "kubelet" it receives instructions from kubenetes api master server
+    # inside kubelet there is cAdivsor, it is responsible for collecting the data

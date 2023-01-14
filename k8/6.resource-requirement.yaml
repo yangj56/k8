@@ -1,0 +1,26 @@
+# node config
+# pod uses what the node is configured (CPU, memory, disk space)
+# kubernetes scheduler decideds how to assign the pod within a node
+# if the node has not enough resources, the schedule will avoid this node and go to the next node
+# if all nodes do not have enough resources, the pod deployment will show "pending (insufficient CPU)"
+# default each pod/container consume (0.5 CPU, 256 mebibyte), scheduler uses these specs to check fo requirement
+# we can set a limit for the resource usage on these pods, 
+      # default: limit 1 vCPU.
+      # default: limit 512 Mebibyte.
+
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: ubuntu-sleeper-pod 
+spec:
+  containers:
+    - name: ubuntu-sleeper
+      image: ubuntu-sleeper
+      ports: 
+        - containerPort: 3001
+      resources:
+        memory: "1Gi"
+        cpu: 1
+      limits:
+        memory: "2Gi"
+        cpu: 2

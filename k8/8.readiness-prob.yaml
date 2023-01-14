@@ -1,0 +1,39 @@
+# pod lifecycle
+# "pending" -> scheduler will assign the pod -> scheduled -> "containerCreating" (pulling image from image registry) -> wait for all the containers to start -> "running"
+        # if cannot assign -> stuck in pending (run kubectl describe pod to find out why)
+
+# pod conditions
+  # initialized
+  # ready
+  # podscheduled
+
+# if all the containers' pod condition's ready is true, POD is ready (the final ready at the pod describe)
+# containers need time to start up just like warming up or connecting with db so the container's readiness check needs to wait for the server to send a ok check
+# readiness check
+# with the readiness probe -> even when the pod condition is ready, kubernetes is not going to set the pod to ready yet, it will do one more check 
+# on the health check on readiness path. traffic will only serve to the container if the readiness probe is successful
+# readiness probe is good for scaling, cuz the newly added pod will be sure is read with the healthcheck before serving traffic to the pod
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp
+spec:
+  containers: # an array of containers
+    - name: simple-webapp
+      image: simple-webapp
+      ports: 
+        containerPort: 6000
+      readinessProbe:
+        httpGet:
+          path: /api/ready/health
+          port: 8080
+        tcpSocket:
+          port: 3306
+        exec:
+          command:
+            - cat
+            - /app/isready
+        initialDelaySeconds: 10 # give some time for the server to warm up before checking
+        periodSeconds: 5 # how often to probe
+        failureThreshold: 8 # default if 3 tries failed, the probe will stop

@@ -1,0 +1,22 @@
+# if 2 containers are in the same pod they are in the same network, they can communicate with each other using localhost, access the same volume storage
+
+# 3 common patterns
+# 1. sidecar
+  # logger -> forwarding logs to a central web server
+# 2. adapter
+  # log formatter -> formatting to a common pattern so it is readable in a consistent manner
+# 3. ambassador
+  # database connector -> proxy request to the environment database
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp
+spec:
+  containers: # an array of containers
+    - name: simple-webapp
+      image: simple-webapp
+      ports: 
+        containerPort: 6000
+    - name: log-agent
+      image: log-agent

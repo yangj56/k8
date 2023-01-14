@@ -1,0 +1,24 @@
+# there different ways to group pods 
+  # by class (mammals, birds, reptiles)
+  # by kind (domestic, wild)
+  # by color (red, green)
+  # we can have multiple criteria
+  # in kubenetes we can group by
+    # object type (pod, replicaset, deploy, service)
+    # app1, app2
+    # web server, database, cache
+
+# that is label, and you can use select to filter 
+apiVersion: 1
+kind: Pod
+metadata: 
+  name: web-app
+  labels:
+    app: app1
+    function: frontend
+spec:
+  containers:
+    - name: simple-webapp
+      image: simple-webapp-image
+      ports: 
+        - containerPods: 8080

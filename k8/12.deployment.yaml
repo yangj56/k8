@@ -1,0 +1,42 @@
+# deployment types
+  # rolling update: dont upgrade all the versions together one at a time
+
+# this definition file creates: deployment, replicaset, pod
+
+# deployment works: everytime each deployment is created or upgrade, it triggers "rollout", it keep tracks of the revision version and helps with rollback if neccesary
+# check rollout by kubectl rollout command
+
+# deployment strategy
+ # recreate strategy: destroy all and create all (this is not recommended)
+ # rolling update: take down the oldest one and create one (default deployment strategy)
+
+# how to upgrade?
+  # we can update the definition file and run kubectl apply -f deployment.yaml to trigger a rollout
+  # or we can run kubectl set image xx/v1 (but this way will not keep deployment definition file in sync)
+
+# with deployment we can rollback if we deploy wrong versions or bad application
+  # run kubectl rollout undo deployment-name
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-webapp-replicaset
+  labels: 
+    app: app1
+    function: front-end
+  annotations:
+    buildVersion: 1.44
+specs:
+  replica: 3
+  selector:
+    matchLabels:
+     app: app1
+  template:
+    metadata:
+      labels: 
+        app: app1
+        function: front-end
+    specs:
+      containers:
+        - name: simple-webapp
+          image: simple-webapp

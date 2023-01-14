@@ -1,0 +1,45 @@
+# enable communication between and outside of kubenetes cluster
+# there are 3 types of service: 1. NodePort 2: ClusterIP 3: LoadBalancer
+# service -> listen to a pod on a node and forward request 
+# between user to frontend, between frontend and backend, between backend and db clusters
+# external communication
+  # user to frontend
+    # user's localhost to frontend -> nodeport listen to a port
+    # nodeport created using [NodePort: 30008 -> port: 80] -> [targetport:80 -> POD]
+    # nodeport must be 30000 to 32767 range
+    # nodeport works with multiple pods using selectors
+    # nodeport is using random algorithm to direct traffic to multiple pods matching the selector
+    # nodeport works for multiple pods and multiple nodes (kubenetes handle it automatically)
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: myapp-service
+# spec:
+#   type: NodePort
+#   ports:
+#     - targetPort: 80
+#       port: 80 # required 
+#       nodePort: 30008
+#   selector:
+#     app: myapp
+#     type: frontend
+
+# internal applications
+  # frontend to backend or backend to redis
+    # clusterIP: we cannot rely on just IP because application ip changes it is dynamic
+    # it groups all the applications together as on single interface so that it can be reach from another application
+    # application communicate with clusterIP and clusterIp will direct the traffic to the indidivudal pod
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 80
+      port: 80
+  selector:
+    app: myapp
+    type: frontend

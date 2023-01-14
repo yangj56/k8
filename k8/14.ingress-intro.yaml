@@ -1,0 +1,69 @@
+# it encompasses a few networking features: load balancing, url rules, ssl termination, reduce multiple load balancers
+# it helps you by providing one single externally accessible url and configure routes to different backend services based on url
+# think of it as a layer 7 load balancer
+
+
+# with ingress you still need nodePort to expose to external or you can use cloud native load balancer
+# ingress handles load balancing, Auth, SSL and URL based routing configurations
+
+# ingress controller with nginx
+
+# deploy ingress controller
+
+# apiVersion: extensions/v1beta1
+# kind: deployments
+# metadata:
+#   name: nginx-ingress-controller
+# spec:
+#   replica: 1
+#   selector: 
+#     matchingLabels: 
+#       name: nginx-ingress
+#   template:
+#     metadata: 
+#       labels:
+#         name: nginx-ingress
+#     spec:
+#       containers:
+#         - name: nginx-ingress-controller
+#           image: quay.io/kubernetes-ingresscontroller/nginx-ingress-controller:0.21.0
+#       args:
+#         - /nginx-ingress-controllernginx-configuration
+#         - -configmap=$(POD_NAMESPACE)/nginx-configuration
+#       env:
+#         - name: POD_NAME
+#           valueFrom:
+#             fieldRef:
+#               fieldPath: metadata.name
+#         - name: POD_NAMESPACE
+#           valueFrom:
+#             fieldRef:
+#               fieldPath: metadata.namespace
+#       ports:
+#         - name: http
+#           containerPort: 80
+#         - name: https
+#           containerPort: 443
+
+# we need create a configmap to pass the configuration options to the nginx ingress controller
+# configuration config: err-log-path, keep-alive, ssl-protocols
+
+# after we need to expose the ingress controller to the external world so we need to create a nodeport
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-ingress
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  - port: 443
+    targetPort: 443
+    protocol: TCP
+    name: https
+  selector:
+    name: nginx-ingress

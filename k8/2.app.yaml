@@ -10,3 +10,4 @@ spec:
       image: ubuntu-sleeper
       command: ["sleep"] # override the ENTRYPOINT instruction in docker file
       args: ["10"] # override the CMD instruction in docker file
+      
