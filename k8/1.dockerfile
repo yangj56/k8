@@ -6,10 +6,18 @@
 # running docker image
 # docker run this-docker-image 5 (5 will be appended to this docker)
 # but still we can override by --entrypoint
-FROM nginx:1.19.5
+
+# format: INSTRUCTION ARGUMENT
+FROM nginx:1.19.5 # image name
+
+RUN apt-get update
+RUN apt-get install python
+
+RUN pip install flask
+RUN pip install flask-mysql
 
 EXPOSE 80
-COPY index.html /usr/share/nginx/html
+COPY index.html /usr/share/nginx/html # copy file from local system (index.html) to /usr... docker image
 
 CMD ["nginx", "-g", "daemon off;"]
 
@@ -18,8 +26,7 @@ FROM nginx
 
 EXPOSE 80
 
-# entry point is the default command that will be run when the 
-
+# entry point is the default command that will be run when the docker container starts
 ENTRYPOINT [ "sleep" ]
 
 # CMD needs to be in array of arguments ["sleep","5"]
