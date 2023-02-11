@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata: 
+  creationTimetimep: null
+  name: kube-apiserver
+  namespace: kube-system
+spec:
+  containers:
+    - command:
+      - kube-apiserver 
+      - --authorization-mode=Node,RBAC
+      - --advertise-address=172.17.0.107
+      - --allow-priviledge=true
+      - --enable-admission-plugins=NodeRestriction
+      - --enable-bootstrap-token-auth=true
+      - --basic-auth-file=user-xx.csv
+      image: k8s.gcr.io/kube-apiserver-amd64:v1.11.3
+      name: kube-apiserver

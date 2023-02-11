@@ -1,0 +1,53 @@
+important docs
+for declarative method
+https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.26/
+
+for imperative method
+https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#-strong-getting-started-strong-
+
+sample yamls
+https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+
+source <(kubectl completion bash) # set up autocomplete in bash into the current shell, bash-completion package should be installed first.
+echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
+alias k=kubectl
+complete -o default -F __start_kubectl k
+export dro="--dry-run=client -o yaml"
+
+
+k get something --no-headers | wc -l
+
+k apply -f .yaml
+k create -f .yaml
+
+always check all namespaces
+k get pod --all-namespaces
+
+create pod yaml using dryrun
+k run pod-name --image=nginx:alpine --dry-run=client -oyaml > logger.yaml
+k create deployment ...
+
+edit existing pod  
+k get pod pod-name -n namespace -oyaml > xx.yaml
+
+k exec -it pod-name -- sh (to test connections)
+ -> ping another pod by
+    nc -v -z -w 2 podname 80
+
+k get netpol
+k describe podname
+k get pod --show-labels
+k get ns
+
+upgrade image of the deployment
+k set image deployment deployment-name nginx=nginx:1.17
+
+for volume always create specs.volume then use volumneMounts to mount the name
+
+service check what it the port
+k get svc
+
+k run ngix-433 --image=nginx:alphine
+k create ns apx-t123

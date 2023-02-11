@@ -24,3 +24,10 @@ spec:
       limits:
         memory: "2Gi"
         cpu: 2
+      resource:
+        request: 
+          cpu: "30m"
+          memory: "30Mi"
+        limit: 
+          cpu: "300m"
+          memory: "30Mi"

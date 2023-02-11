@@ -1,0 +1,15 @@
+kubectl api-resources --namespaced=true
+kubectl api-resources --namespaced=false
+
+
+namespaced resources
+pods,replicasets,jobs,deployments,services,secrets,roles
+rolebindings,configmaps,PVC
+
+cluster scoped resources
+nodes,PV,clusterroles,clusterrolebindings,certificatesigningrequests,
+namespaces
+
+    1.namespaced for cluster wide scope resources
+    2.we use clusterroles to manage cluster scoped resources
+    3.they can create PVs, delete PVs

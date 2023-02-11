@@ -14,7 +14,12 @@ spec:
     volumeMounts:
     - mountPath: /opt
       name: data-volume
+    - mountPath: /var 
+      name: log # the name below
   volumes:
+  - name: log
+    persistentVolumeClaim:
+      claimName: log-name # the name of the pvc you created
   - name: data-volume
     hostPath:
       path: /data #the random number will be stored in node /data folder

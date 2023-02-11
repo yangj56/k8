@@ -1,0 +1,37 @@
+all access to host must disable password authentication, only use SSH based access
+how to secure the cluster?
+    control access kube-apiserver
+        who can access?
+            authenticate using files: 
+                username and password
+                username and token
+                certificates
+                ldap
+                    all the above is considered user account and kubenetes dont manage it, we cannot create users using cmd
+                    all the request such as curl or kubectl commands
+                        1. kube-apiserver authenticates
+                        2. static password file
+                        3. stateic token file
+                            for 2 and 3, create a csv 
+                            --basic-auth-file=xx.csv
+                            inside kube-apiserver.service
+                                        execstart=
+                            there is yaml for it also
+                        when curling pass the user and password behind
+                        exampe: 
+                            curl -v -k https://master-node-ip:6443/api/v1/pods -u "user1:password123"
+                            curl -v -k https://master-node-ip:6443/api/v1/pods --header "Authorization: Bearer xxasdfasdf"
+                            
+                service account
+                    but we can create service account for bots to access 
+        what can they do?
+            RBAC authorization
+            ABAC
+            NODE
+            webhook mode
+        how kube-apiserver communicate with other components in the cluster? (kubelet, ETCD, kube proxy, kube scheduler, kube controller manger)\
+            TLS connections
+    control access between applications in the cluster
+        by default all pods can access other pods in the cluster
+        but we can manage using network policies
+    
