@@ -1,0 +1,4 @@
+To indent multiple lines using vim you should set the shiftwidth using :set shiftwidth=2. Then mark multiple lines using Shift v and the up/down keys.
+To then indent the marked lines press > or < and to repeat the action press .
+
+/xxx n for next N for previous

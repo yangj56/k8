@@ -10,12 +10,16 @@ https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
+.bashrc
 source <(kubectl completion bash) # set up autocomplete in bash into the current shell, bash-completion package should be installed first.
 echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
 alias k=kubectl
 complete -o default -F __start_kubectl k
-export dro="--dry-run=client -o yaml"
+"export dro="--dry-run=client -o yaml""
 
+.vimrc
+set tabstop=2 shiftwidth=2 expandtab # use 2 spaces instead of tab
+set ai # autoindent: when go to new line keep same indentation
 
 k get something --no-headers | wc -l
 
@@ -36,18 +40,37 @@ k exec -it pod-name -- sh (to test connections)
  -> ping another pod by
     nc -v -z -w 2 podname 80
 
-k get netpol
-k describe podname
-k get pod --show-labels
-k get ns
+get clusterIP
+k -n mars get pod -o wide # to get the cluster IP
 
-upgrade image of the deployment
-k set image deployment deployment-name nginx=nginx:1.17
+k -n mars get all
 
-for volume always create specs.volume then use volumneMounts to mount the name
+temp container to query or curl 
+k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 manager-api-svc:4444 (clusterIP)
+k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 10.0.1.14 (pod ip)
 
-service check what it the port
-k get svc
+k -n jupiter edit service jupiter-crew-svc
 
-k run ngix-433 --image=nginx:alphine
-k create ns apx-t123
+# get pod with a specific label
+k -n sun get pod -l type=runner # only pods with label runner
+
+helm
+show all including pending ones
+helm -n mercury ls -a
+
+labels
+k -n sun get pod --show-labels
+
+k -n moon get pod -o wide # get pod cluster IPs
+
+deploy
+k -n moon rollout restart deploy web-moon
+
+initContainer
+tmp/nameofthevolume
+
+service selector is for pods not deployment
+service port is the one we should curl
+
+get all nodes ip address
+k get nodes -o wide
