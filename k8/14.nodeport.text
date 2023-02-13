@@ -1,0 +1,9 @@
+if we create the service it shows
+
+NAME                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+service/kubernetes   ClusterIP   10.96.0.1       <none>        443/TCP        17d
+service/wonderful    NodePort    10.100.18.176   <none>        80:30080/TCP   40s
+
+can curl wonderful:30080 # 30080 
+
+k expose deployment my-dep --name=xxx --type=NodePort --port=80 > yaml

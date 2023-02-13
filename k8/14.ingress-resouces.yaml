@@ -44,14 +44,20 @@ spec:
   - host: wear.my-online-store.com
     http:
      paths:
-      - path: /wear
+      - pathType: prefix
+        path: "/wear"
         backend: 
-          serviceName: wear-service
-          servicePort: 80
+          service: 
+            name: wear-service
+            port: 
+              number: 80 # this port is from service check using kubectl
   - host: watch.my-online-store.com
     http:
      paths:
-      - path: /watch
+      - pathType: prefix
+        path: "/watch"
         backend: 
-          serviceName: watch-service
-          servicePort: 80
+          service: 
+            name: watch-service
+            port: 
+              number: 80 # this port is not the url port

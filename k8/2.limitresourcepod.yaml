@@ -1,0 +1,18 @@
+# The entrypoint is the command that is run at startup, 
+# and the CMD is the default parameter passed to the command.
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: ubuntu-sleeper-pod 
+spec:
+  containers:
+    - image: ubuntu-sleeper
+      name: my-container
+      resources:
+        requests:
+          memory: "30Mi"
+          cpu: "30m"
+        limits:
+          memory: "30Mi"
+          cpu: "300m"
+        

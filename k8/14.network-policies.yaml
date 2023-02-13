@@ -17,6 +17,7 @@ spec:
     matchingLabels: 
       role: db
   policyType:
+  - egress  # another example we only want to control egress
   - ingress #(allow ingress for the db application, the ingress must be from api-pod on port 3306)
   ingress:
   - from:
@@ -26,3 +27,24 @@ spec:
     ports:
     - protocol: tcp
       port: 3306
+    policyTypes:
+  egress:                   # this is OR
+  - to:                     # 1st egress rule
+    - podSelector:            # allow egress only to pods with api label
+        matchLabels:
+          id: api
+  - ports:                  # 2nd egress rule
+    - port: 53                # allow DNS UDP
+      protocol: UDP
+    - port: 53                # allow DNS TCP
+      protocol: TCP
+  egress2:                   # this is for namespace
+  - ports:
+    - port: 53
+      protocol: TCP
+    - port: 53
+      protocol: UDP
+  - to:
+     - namespaceSelector: # using namespace and you need to create this np in another namespace
+        matchLabels:
+         kubernetes.io/metadata.name: space2

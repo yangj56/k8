@@ -3,7 +3,6 @@
 # cron expressions: 
 # * * * * * 
 
-# 1: seconds (0-59)                  Allow special: , - * /
 # 1: minutes (0-59)                  Allow special: , - * /
 # 2: hours (0-23)                    Allow special: , - * /
 # 3: day of the month (1-31)         Allow special: , - * ? / L W C

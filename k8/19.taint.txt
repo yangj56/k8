@@ -1,0 +1,11 @@
+k taint node node1 app_type=alpha:NoSchedule
+
+create a pod with tolerate
+k run pod-xx-name --image=xx -o >test
+
+pod.spec.tolerations.effect = NoSchedule
+pod.spec.tolerations.key = app_type
+pod.spec.tolerations.value = alpha
+
+check where is your pod deployed 
+k get pod -o wide

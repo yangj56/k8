@@ -8,7 +8,7 @@
 # but still we can override by --entrypoint
 
 # format: INSTRUCTION ARGUMENT
-FROM nginx:1.19.5 # image name
+FROM nginx:1.19.5
 
 RUN apt-get update
 RUN apt-get install python
@@ -33,3 +33,7 @@ ENTRYPOINT [ "sleep" ]
 # CMD can be easily overwritten by when running docker by
 # docker run this-docker-image sleep 5
 CMD ["5"]
+
+
+FROM bash
+CMD ["ping", "killercoda.com"]

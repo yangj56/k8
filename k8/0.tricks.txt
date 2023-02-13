@@ -30,54 +30,122 @@ k get something --no-headers | wc -l
 
 k delete --grace-period=0 --force
 
-k apply -f .yaml
-k create -f .yaml
+----> versioning
+k version --short
 
-always check all namespaces
+----> admission-plugins
+cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep admission-plugins
+
+----> label
+k label node/pod xx-name key=value
+
+----> CRD
+k get crd
+
+----> expose
+k -n world expose deploy europe --port 80
+
+----> get all
+k get db-backups -A # the -A very important
+
+----> scale down a rollout
+kubectl scale deploy wonderful-v1 --replicas 0
+
+----> root user
+runAsUser: 0
+
+----> delete pod of certain label
+k delete pod -l xx=xxx
+
+----> expose deployment
+k expose deployment xx-deployment --port=21 --name=xx-name
+
+----> get only warning logs
+k logs pod-name -c log-x | grep WARNING > test.txt
+
+----> pod is scheduled on controlplane only
+pod.spec.nodeName: controlplane
+
+----> always check all namespaces
 k get pod --all-namespaces
 
-create pod yaml using dryrun
+----> create pod yaml using dryrun
 k run pod-name --image=nginx:alpine --dry-run=client -oyaml > logger.yaml
-k create deployment ...
 
-edit existing pod  
+----> edit existing pod  
 k get pod pod-name -n namespace -oyaml > xx.yaml
 
-k exec -it pod-name -- sh (to test connections)
+----> edit existing deployment  
+k edit deploy wonderful-v1
+
+----> to test connections
+k exec -it pod-name -- sh 
  -> ping another pod by
     nc -v -z -w 2 podname 80
 
-get clusterIP
+----> get clusterIP
 k -n mars get pod -o wide # to get the cluster IP
 
+----> get all the items in namespace
 k -n mars get all
 
-temp container to query or curl 
+----> labels
+k -n sun get pod --show-labels
+
+----> get all nodes ip address
+k get nodes -o wide
+
+----> update image
+k set image deploy/pod xxx containername=imagexxx
+
+----> temp container to query or curl 
 k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 manager-api-svc:4444 (clusterIP)
 k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 10.0.1.14 (pod ip)
 
+----> edit service
 k -n jupiter edit service jupiter-crew-svc
 
-# get pod with a specific label
+---->  get pod with a specific label
 k -n sun get pod -l type=runner # only pods with label runner
 
-helm
+----> helm
 show all including pending ones
 helm -n mercury ls -a
 
-labels
-k -n sun get pod --show-labels
-
-k -n moon get pod -o wide # get pod cluster IPs
-
-deploy
+----> deploy
 k -n moon rollout restart deploy web-moon
 
-initContainer
+----> initContainer
 tmp/nameofthevolume
 
-service selector is for pods not deployment
-service port is the one we should curl
+----> service selector is for pods not deployment
+----> service port is the one we should curl
 
-get all nodes ip address
-k get nodes -o wide
+---> api
+k api-resources
+
+k proxy 8081&
+curl localhost:8081/api/authorization.k8s.io
+
+vim /etc/kubernetes/manifests/kube-apiserver.yaml
+command --runtime-config=
+
+kubeconfig
+cat /.kube/config
+k config use-context xx (context.name) -kubeconfig /filename
+check current context cat /.kube/config again and look for current-context
+
+authorization mode
+vim /etc/kubernetes/manifests/kube-apiserver.yaml
+inside spec.containers.command.authorization-mode 
+k get roles
+k get roles -A
+k get roles -A --no-headers | wc -l
+k describe role kube-proxy-role
+
+which account role is assigned to?
+k get rolebindings -n nass
+k describe rolebinding nnnxxx
+
+k --as dev-user get pod xxx -n xx
+if cannot meaning the user doesnt have permission
