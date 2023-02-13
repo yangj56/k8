@@ -1,3 +1,5 @@
+# If you configure it at a POD level, the settings will carry over to all the containers within the POD. 
+# If you configure it at both the POD and the Container, the settings on the container will override the settings on the POD.
 
 apiVersion: v1 
 kind: Pod 

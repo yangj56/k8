@@ -15,13 +15,20 @@ source <(kubectl completion bash) # set up autocomplete in bash into the current
 echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
 alias k=kubectl
 complete -o default -F __start_kubectl k
+
 "export dro="--dry-run=client -o yaml""
+"export tmp="--image=nginx:alpine --restart=Never --rm -i -- curl -m 5""
+
+k -n ss run tmp2 $tmp url
 
 .vimrc
 set tabstop=2 shiftwidth=2 expandtab # use 2 spaces instead of tab
-set ai # autoindent: when go to new line keep same indentation
+
+k config set-context --current --namespace=core-banking
 
 k get something --no-headers | wc -l
+
+k delete --grace-period=0 --force
 
 k apply -f .yaml
 k create -f .yaml
