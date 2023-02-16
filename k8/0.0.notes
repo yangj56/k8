@@ -1,0 +1,69 @@
+search:
+kubectl api reference docs -> imperative notes
+kubernetes api reference docs -> full yaml specs
+docs concepts -> find created yamls
+
+"export dro="--dry-run=client -o yaml""
+"export tmp="--image=nginx:alpine --restart=Never --rm -i -- curl -m 5""
+
+multi-container pods communications
+share volume how it works basically
+
+A container has a mountPath, so the whole volume is mounted on this path
+B container has another mountPath, this path is only in B and anything B does to this
+mountPath eg /xx-folder and you command to store anything in xx-folder/something only
+something will be store in the shared volume
+
+Kubernetes assumes that pods can communicate with other pods, regardless of which host they land on. 
+Kubernetes gives every pod its own cluster-private IP address
+
+
+after a deployment is created we need to expose them    
+to test if service is working check 
+1. selector: it must match the label on the pods
+2. selector for both deployment and pod must be the same?
+    no only pod must have the same label
+3. selector match pod
+4. namespace must be the same
+5. if the pod is in a different namespace the service selector will not be able to find the pods
+
+service ports:
+1. port is for query using service name or clusterIP
+```
+Create a second service based on the above service, exposing the container port 8443 as port 443 with the name "nginx-https"
+kubectl expose service nginx --port=443 --target-port=8443 --name=nginx-https
+
+query service check must include namespace
+k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 10.109.187.149 # by clusterIP
+k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 xxx-name:port # by service name and port number
+k run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 xxx-name.namespace:port # by service name and namespace and port number
+
+query pod to check network policy
+k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 10.0.1.14 (pod ip)
+```
+2. targetPort is the containerPort
+3. changing to nodePort the original clusterIP will still work
+4. nodePort is in g all second number under port column eg: 90:30023, 30023 is the nodePort
+5. we can query nodeport directly using localhost:30023
+6. ingress with rule will result others blocked
+7. rewrite annotation > when we put a /xx prefix it is added to the service and forwarded to the pod so if we dont want this behaviour we can remove the /xx
+8. pv and pvc accessmode mismatch (they must be the same)
+9. if the pod is still consuming the pvc, deleting the pvc will result in terminating (not terminated)
+10. list all the api resources and check their versions (k api-resources)
+11. k proxy 8001&
+12. enable a new version -> inside kube-apiserver yaml -> --runtime-config=
+13. ingress controller basically needs a service that talks to a service with nodePort
+14. ingress resources handles with services and service's port 
+15. blue green: using 2 different selector in the service > once test update the selector to the new one
+16. canary: using the same selector but the new deployment has a smaller number of pods. use the pods to decide the percentage by scaling up or down
+17: taint effect -> what happen when they dont tolerate the taint
+
+docker:
+docker build -f DockerFileName -t name:xxx . (. is for current directory)
+docker push dockerhubregistryname/tagname123
+docker run this-docker-image 5 (5 will be appended to this docker)
+docker run --env APP_COLOR=red -p 8282:8080 webapp-color
+
+debugging:
+1. check container logs first
+2. \c for case insenstive

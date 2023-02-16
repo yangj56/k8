@@ -98,10 +98,6 @@ k get nodes -o wide
 ----> update image
 k set image deploy/pod xxx containername=imagexxx
 
-----> temp container to query or curl 
-k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 manager-api-svc:4444 (clusterIP)
-k -n mars run tmp --restart=Never --rm -i --image=nginx:alpine -- curl -m 5 10.0.1.14 (pod ip)
-
 ----> edit service
 k -n jupiter edit service jupiter-crew-svc
 
